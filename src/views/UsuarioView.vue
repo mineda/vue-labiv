@@ -1,27 +1,31 @@
 <template>
     <div class="usuario">
-        <p v-if="nome.length > 5">{{nome}}</p>
-        <p><input type="text" v-model="nome"><button @click="inserirUsuario()">Ok</button></p>
         <ul>
-            <li v-for="(usuario, i) in usuarios" :key="i">{{usuario}}</li>
+            <li v-for="(usuario, i) in usuarios" :key="i">{{usuario.nome}}</li>
         </ul>
     </div>    
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     name: 'usuarioView',
     data() {
         return {
-            nome: 'Mineda',
-            usuarios: ['oi', 'tchau']
+            usuarios: []
         }
     },
     methods: {
-        inserirUsuario() {
-            this.usuarios.push(this.nome);
-            this.nome = '';
+        atualizar() {
+            axios.get('usuario')
+                .then(res => {
+                    this.usuarios = res.data;
+                })
         }
+    },
+    created() {
+        this.atualizar();
     }
 }
 </script>
